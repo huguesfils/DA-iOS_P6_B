@@ -129,3 +129,4 @@ CandidateAPI/Sources/App/Models/User.swift
 CandidateAPI/Sources/App/Models/UserPayload.swift
 CandidateAPI/Sources/App/routes.swift
 CandidateAPI/Tests/AppTests/AppTests.swift
+/CandidateAPI
