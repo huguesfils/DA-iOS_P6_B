@@ -88,3 +88,24 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+.DS_Store
+backend/docker-compose.yml
+backend/Dockerfile
+backend/Package.resolved
+backend/Package.swift
+backend/Public/.gitkeep
+backend/README.md
+backend/Sources/App/configure.swift
+backend/Sources/App/Controllers/.gitkeep
+backend/Sources/App/Controllers/CandidateController.swift
+backend/Sources/App/Controllers/UserController.swift
+backend/Sources/App/entrypoint.swift
+backend/Sources/App/Middlewares/AdminMiddleware.swift
+backend/Sources/App/Middlewares/UserTokenAuthMiddleware.swift
+backend/Sources/App/Migrations/CreateCandidate.swift
+backend/Sources/App/Migrations/CreateUser.swift
+backend/Sources/App/Models/Candidate.swift
+backend/Sources/App/Models/User.swift
+backend/Sources/App/Models/UserPayload.swift
+backend/Sources/App/routes.swift
+backend/Tests/AppTests/AppTests.swift
