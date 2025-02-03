@@ -3,11 +3,11 @@ import SwiftUI
 struct LoginView: View {
     @State private var email = ""
     @State private var password = ""
-    @State private var showRegister = false
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
+                Spacer()
                 Text("Login")
                     .font(.largeTitle)
                     .fontWeight(.bold)
@@ -17,7 +17,7 @@ struct LoginView: View {
                 AuthTextField(placeholder: "Password", text: $password, isSecure: true)
 
                 Button(action: {
-                   
+                   //TODO: auth
                 }) {
                     Text("Se connecter")
                         .frame(maxWidth: .infinity)
@@ -31,24 +31,18 @@ struct LoginView: View {
 
                 Spacer()
 
-                Button(action: {
-                    showRegister = true
-                }) {
-                    Text("Pas encore inscrit ? S'enregistrer")
-                        .foregroundColor(.blue)
-                        .font(.footnote)
-                }
-                .padding(.bottom, 10)
-
                 NavigationLink(
                     destination: RegisterView(),
-                    isActive: $showRegister,
                     label: {
-                        EmptyView()
+                        Text("Pas encore inscrit ? S'enregistrer")
+                            .foregroundColor(.blue)
+                            .font(.footnote)
                     }
                 )
+                .padding(.bottom, 10)
+                
             }
-            .navigationTitle("")
+            .navigationTitle("Login")
             .navigationBarHidden(true)
         }
     }
