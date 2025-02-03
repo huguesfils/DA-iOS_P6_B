@@ -1,11 +1,7 @@
 import SwiftUI
 
 struct RegisterView: View {
-    @State private var firstName = ""
-    @State private var lastName = ""
-    @State private var email = ""
-    @State private var password = ""
-    @State private var confirmPassword = ""
+   @StateObject private var viewModel = RegisterViewModel()
     
     var body: some View {
         VStack(spacing: 20) {
@@ -14,11 +10,11 @@ struct RegisterView: View {
                 .fontWeight(.bold)
                 .padding(.bottom, 40)
             
-            AuthTextField(placeholder: "First name", text: $firstName)
-            AuthTextField(placeholder: "Last name", text: $lastName)
-            AuthTextField(placeholder: "Email", text: $email)
-            AuthTextField(placeholder: "Password", text: $password, isSecure: true)
-            AuthTextField(placeholder: "Confirm password", text: $password, isSecure: true)
+            AuthTextField(placeholder: "First name", text: $viewModel.firstName)
+            AuthTextField(placeholder: "Last name", text: $viewModel.lastName)
+            AuthTextField(placeholder: "Email", text: $viewModel.email)
+            AuthTextField(placeholder: "Password", text: $viewModel.password, isSecure: true)
+            AuthTextField(placeholder: "Confirm password", text: $viewModel.confirmPassword, isSecure: true)
             
             Button(action: {
                 // TODO: register
