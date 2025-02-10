@@ -1,16 +1,15 @@
 import SwiftUI
 
-@MainActor
 final class CandidateViewModel: ObservableObject {
-    @AppStorage("authToken") private var authToken: String?
-    @Published var isLoggedIn: Bool = false
-
-    init() {
-        isLoggedIn = authToken != nil
+    let onLogout: (() -> ())
+    
+    init(_ callback: @escaping () -> ()) {
+        self.onLogout = callback
     }
-
+    
     func logout() {
-        authToken = nil
-        isLoggedIn = false
+        UserDefaults.standard.removeObject(forKey: "isLogged")
+        UserDefaults.standard.synchronize()
+        onLogout()
     }
 }

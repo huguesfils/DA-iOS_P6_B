@@ -1,11 +1,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    @StateObject private var viewModel: LoginViewModel
-    
-    init(isLoggedIn: Binding<Bool>) {
-        self._viewModel = StateObject(wrappedValue: LoginViewModel(isLoggedIn: isLoggedIn))
-    }
+    @ObservedObject var viewModel: LoginViewModel
     
     var body: some View {
         NavigationStack {
@@ -65,5 +61,5 @@ struct LoginView: View {
 }
 
 #Preview {
-    LoginView(isLoggedIn: .constant(false))
+    LoginView(viewModel: LoginViewModel({}))
 }

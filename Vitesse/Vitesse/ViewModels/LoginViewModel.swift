@@ -8,12 +8,13 @@ final class LoginViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var alertMessage: String = ""
-    @Binding var isLoggedIn:Bool
+    
+    let onLoginSucceed: (() -> ())
     
     private let networkService = NetworkService.shared
     
-    init(isLoggedIn: Binding<Bool>) {
-        self._isLoggedIn = isLoggedIn
+    init(_ callback: @escaping () -> ()) {
+        self.onLoginSucceed = callback
     }
     
     // MARK: - Login
@@ -29,7 +30,7 @@ final class LoginViewModel: ObservableObject {
                 endpoint: APIEndpoint.auth(email: email, password: password)
             )
             await networkService.setAuthToken(response.token)
-            isLoggedIn = true
+            onLoginSucceed()
         } catch let error as VitesseError {
             alertMessage = error.errorMessage
             showAlert = true
@@ -38,7 +39,6 @@ final class LoginViewModel: ObservableObject {
             showAlert = true
             print(error)
         }
-        isLoggedIn = false
     }
     
     // MARK: - Credentials validation

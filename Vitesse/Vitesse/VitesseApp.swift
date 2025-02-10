@@ -2,14 +2,14 @@ import SwiftUI
 
 @main
 struct VitesseApp: App {
-    @State var isLoggedIn = false
+    @StateObject var viewModel = AppViewModel()
     
     var body: some Scene {
         WindowGroup {
-            if isLoggedIn {
-                CandidateView(viewModel: CandidateViewModel())
+            if viewModel.isLogged  {
+                CandidateView(viewModel: viewModel.candidateViewModel)
             } else {
-                LoginView(isLoggedIn: self.$isLoggedIn)
+                LoginView(viewModel: viewModel.loginViewModel)
             }
         }
     }

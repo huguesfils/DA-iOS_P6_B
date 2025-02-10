@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CandidateView: View {
-    @StateObject var viewModel: CandidateViewModel
+    @ObservedObject var viewModel: CandidateViewModel
 
     var body: some View {
         VStack {
@@ -29,5 +29,5 @@ struct CandidateView: View {
 }
 
 #Preview {
-    CandidateView(viewModel: CandidateViewModel())
+    CandidateView(viewModel: CandidateViewModel({}))
 }
