@@ -2,9 +2,11 @@ import SwiftUI
 
 @main
 struct VitesseApp: App {
+    @State private var isLogged = false
+    
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            ContentView(isLogged: $isLogged)
         }
     }
 }
