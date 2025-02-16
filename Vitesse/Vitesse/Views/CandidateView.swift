@@ -1,26 +1,26 @@
 import SwiftUI
 
 struct CandidateView: View {
-    @ObservedObject var viewModel: CandidateViewModel
-
+    @StateObject var viewModel: CandidateViewModel
+    
     var body: some View {
         VStack {
             Text("Bienvenue dans CandidateView 👋")
                 .font(.title)
                 .padding()
-
-            Button(action: {
-                viewModel.logout()
-            }) {
-                Text("Se déconnecter")
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.red)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+            
+            Button("Se déconnecter") {
+                Task {
+                    await viewModel.logout()
+                }
             }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color.red)
+            .foregroundColor(.white)
+            .cornerRadius(10)
             .padding(.horizontal)
-
+            
             Spacer()
         }
         .padding()
@@ -29,5 +29,5 @@ struct CandidateView: View {
 }
 
 #Preview {
-    CandidateView(viewModel: CandidateViewModel({}))
+    CandidateView(viewModel: CandidateViewModel(isLogged: .constant(true)))
 }

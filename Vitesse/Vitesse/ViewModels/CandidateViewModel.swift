@@ -1,15 +1,15 @@
 import SwiftUI
 
+@MainActor
 final class CandidateViewModel: ObservableObject {
-    let onLogout: (() -> ())
+    private var isLogged: Binding<Bool>
     
-    init(_ callback: @escaping () -> ()) {
-        self.onLogout = callback
+    init(isLogged: Binding<Bool>) {
+        self.isLogged = isLogged
     }
     
-    func logout() {
-        UserDefaults.standard.removeObject(forKey: "isLogged")
-        UserDefaults.standard.synchronize()
-        onLogout()
+    func logout() async {
+        await NetworkService.shared.clearAuthToken()
+        isLogged.wrappedValue = false
     }
 }

@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct LoginView: View {
-    @ObservedObject var viewModel: LoginViewModel
+    @Binding var isLogged: Bool
+    @StateObject private var viewModel = LoginViewModel()
     
     var body: some View {
         NavigationStack {
@@ -15,11 +16,14 @@ struct LoginView: View {
                 AuthTextField(placeholder: "Email", text: $viewModel.email)
                 AuthTextField(placeholder: "Password", text: $viewModel.password, isSecure: true)
                 
-                Button(action: {
+                Button {
                     Task {
                         await viewModel.login()
+                        if viewModel.isLogged {
+                            isLogged = true
+                        }
                     }
-                }) {
+                } label: {
                     if viewModel.isLoading {
                         ProgressView()
                             .frame(maxWidth: .infinity)
@@ -46,7 +50,6 @@ struct LoginView: View {
                     }
                 )
                 .padding(.bottom, 10)
-                
             }
             .navigationTitle("Login")
             .navigationBarHidden(true)
@@ -59,7 +62,6 @@ struct LoginView: View {
         }
     }
 }
-
 #Preview {
-    LoginView(viewModel: LoginViewModel({}))
+    LoginView(isLogged: .constant(true))
 }

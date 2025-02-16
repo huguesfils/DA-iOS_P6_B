@@ -1,6 +1,6 @@
 import SwiftUI
 
-actor NetworkService: NetworkServiceProtocol {
+actor NetworkService: NetworkServiceInterface {
     static let shared = NetworkService()
     
     private var authToken: String?
@@ -66,10 +66,6 @@ actor NetworkService: NetworkServiceProtocol {
 
         if let body = endpoint.body {
             request.httpBody = try JSONEncoder().encode(body)
-
-            if let jsonString = String(data: request.httpBody ?? Data(), encoding: .utf8) {
-                print("📡 Body envoyé : \(jsonString)") // ✅ Vérifie si `email` et `password` sont bien présents
-            }
         }
 
         let (data, response) = try await session.data(for: request)
@@ -103,7 +99,7 @@ actor NetworkService: NetworkServiceProtocol {
 }
 
 // MARK: Protocol
-protocol NetworkServiceProtocol {
+protocol NetworkServiceInterface {
     func setAuthToken(_ token: String) async
     func clearAuthToken() async
     func sendRequest<T: Decodable & Sendable>(endpoint: APIEndpoint) async throws -> T
