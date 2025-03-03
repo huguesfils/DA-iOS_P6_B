@@ -42,7 +42,7 @@ struct LoginView: View {
                 Spacer()
                 
                 NavigationLink(
-                    destination: RegisterView(),
+                    destination: RegisterView(isLogged: $isLogged),
                     label: {
                         Text("Pas encore inscrit ? S'enregistrer")
                             .foregroundColor(.blue)

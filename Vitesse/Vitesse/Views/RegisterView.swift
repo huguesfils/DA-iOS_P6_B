@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct RegisterView: View {
-   @StateObject private var viewModel = RegisterViewModel()
+    @StateObject private var viewModel = RegisterViewModel()
+    @Binding var isLogged: Bool
     
     var body: some View {
         VStack(spacing: 20) {
@@ -19,9 +20,9 @@ struct RegisterView: View {
             Button(action: {
                 Task {
                     await viewModel.register()
-                } 
+                }
             }) {
-                Text("S'enregistrer")
+                Text("Create")
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.blue)
@@ -31,11 +32,20 @@ struct RegisterView: View {
             }
             .padding(.top, 20)
         }
+        .alert(isPresented: $viewModel.showAlert) {
+            Alert(title: Text("Erreur"),
+                  message: Text(viewModel.alertMessage),
+                  dismissButton: .default(Text("OK"))
+            )
+        }
+        .navigationDestination(isPresented: $viewModel.shouldNavigateToLogin) {
+            LoginView(isLogged: $isLogged)
+        }
     }
 }
 
 #Preview {
     NavigationStack {
-        RegisterView()
+        RegisterView(isLogged: .constant(false))
     }
 }

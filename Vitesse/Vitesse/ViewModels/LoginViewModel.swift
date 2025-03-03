@@ -33,7 +33,6 @@ final class LoginViewModel: ObservableObject {
         } catch {
             alertMessage = "Une erreur inconnue est survenue."
             showAlert = true
-            print(error)
         }
     }
     
