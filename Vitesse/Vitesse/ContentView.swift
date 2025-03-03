@@ -6,6 +6,7 @@ struct ContentView: View {
     var body: some View {
         if isLogged {
             CandidateView(viewModel: CandidateViewModel(isLogged: $isLogged))
+            //TODO: voir animation de transition login/logout
         } else {
             LoginView(isLogged: $isLogged)
         }

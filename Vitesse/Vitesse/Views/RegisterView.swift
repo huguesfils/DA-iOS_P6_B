@@ -17,7 +17,9 @@ struct RegisterView: View {
             AuthTextField(placeholder: "Confirm password", text: $viewModel.confirmPassword, isSecure: true)
             
             Button(action: {
-                // TODO: register
+                Task {
+                    await viewModel.register()
+                } 
             }) {
                 Text("S'enregistrer")
                     .frame(maxWidth: .infinity)
