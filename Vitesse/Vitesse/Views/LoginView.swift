@@ -1,8 +1,11 @@
 import SwiftUI
 
 struct LoginView: View {
-    @Binding var isLogged: Bool
-    @StateObject private var viewModel = LoginViewModel()
+    @StateObject private var viewModel: LoginViewModel
+    
+    init(isLogged: Binding<Bool>) {
+        self._viewModel = StateObject(wrappedValue: LoginViewModel(isLogged: isLogged))
+    }
     
     var body: some View {
         NavigationStack {
@@ -19,9 +22,6 @@ struct LoginView: View {
                 Button {
                     Task {
                         await viewModel.login()
-                        if viewModel.isLogged {
-                            $isLogged = true
-                        }
                     }
                 } label: {
                     if viewModel.isLoading {
@@ -42,7 +42,7 @@ struct LoginView: View {
                 Spacer()
                 
                 NavigationLink(
-                    destination: RegisterView(isLogged: $isLogged),
+                    destination: RegisterView(isLogged: viewModel.$isLogged),
                     label: {
                         Text("Pas encore inscrit ? S'enregistrer")
                             .foregroundColor(.blue)

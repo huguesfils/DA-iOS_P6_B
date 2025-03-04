@@ -2,6 +2,8 @@ import SwiftUI
 
 @MainActor
 final class CandidateViewModel: ObservableObject {
+    private let tokenManager = TokenManager.shared
+    
     private var isLogged: Binding<Bool>
     
     init(isLogged: Binding<Bool>) {
@@ -9,7 +11,7 @@ final class CandidateViewModel: ObservableObject {
     }
     
     func logout() async {
-        await NetworkService.shared.clearAuthToken()
+        await tokenManager.clearAuthToken()
         isLogged.wrappedValue = false
     }
 }

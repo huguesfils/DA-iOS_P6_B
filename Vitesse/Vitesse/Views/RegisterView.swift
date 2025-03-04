@@ -1,8 +1,11 @@
 import SwiftUI
 
 struct RegisterView: View {
-    @StateObject private var viewModel = RegisterViewModel()
-    @Binding var isLogged: Bool
+    @StateObject private var viewModel: RegisterViewModel
+    
+    init(isLogged: Binding<Bool>) {
+        self._viewModel = StateObject(wrappedValue: RegisterViewModel(isLogged: isLogged))
+    }
     
     var body: some View {
         VStack(spacing: 20) {
@@ -37,9 +40,6 @@ struct RegisterView: View {
                   message: Text(viewModel.alertMessage),
                   dismissButton: .default(Text("OK"))
             )
-        }
-        .navigationDestination(isPresented: $viewModel.shouldNavigateToLogin) {
-            LoginView(isLogged: $isLogged)
         }
     }
 }

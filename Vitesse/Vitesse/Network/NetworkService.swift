@@ -11,14 +11,6 @@ actor NetworkService: NetworkServiceInterface {
         self.session = session
     }
     
-    func setAuthToken(_ token: String) {
-        self.authToken = token
-    }
-    
-    func clearAuthToken() {
-        self.authToken = nil
-    }
-    
     func sendRequest<T: Decodable & Sendable>(
         endpoint: APIEndpoint
     ) async throws -> T {
@@ -100,8 +92,6 @@ actor NetworkService: NetworkServiceInterface {
 
 // MARK: Protocol
 protocol NetworkServiceInterface {
-    func setAuthToken(_ token: String) async
-    func clearAuthToken() async
     func sendRequest<T: Decodable & Sendable>(endpoint: APIEndpoint) async throws -> T
     func sendVoidRequest(endpoint: APIEndpoint) async throws
 }

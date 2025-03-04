@@ -7,11 +7,15 @@ final class LoginViewModel: ObservableObject {
     @Published var showAlert = false
     @Published var isLoading = false
     @Published var alertMessage: String = ""
+    
     @Binding var isLogged: Bool
     
     private let networkService = NetworkService.shared
+    private let tokenManager = TokenManager.shared
     
-    init
+    init(isLogged: Binding<Bool>) {
+           self._isLogged = isLogged
+       }
     
     func login() async {
         if let error = validateCredentials() {
@@ -27,8 +31,8 @@ final class LoginViewModel: ObservableObject {
             let response: AuthResponse = try await networkService.sendRequest(
                 endpoint: APIEndpoint.auth(email: email, password: password)
             )
-            await networkService.setAuthToken(response.token)
-            isLogged = true
+            await tokenManager.setAuthToken(response.token)
+            self.isLogged = true
         } catch let error as VitesseError {
             alertMessage = error.errorMessage
             showAlert = true

@@ -1,5 +1,5 @@
 import Foundation
 
-struct AuthResponse: Decodable, Encodable {
+struct AuthResponse: Codable {
     let token: String
 }
