@@ -59,4 +59,6 @@ final class RegisterViewModel: ObservableObject {
         }
         return nil
     }
+    
+    // TODO: enum helper avec static func + revoir defer
 }

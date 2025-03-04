@@ -7,9 +7,11 @@ final class LoginViewModel: ObservableObject {
     @Published var showAlert = false
     @Published var isLoading = false
     @Published var alertMessage: String = ""
-    @Published var isLogged = false
+    @Binding var isLogged: Bool
     
     private let networkService = NetworkService.shared
+    
+    init
     
     func login() async {
         if let error = validateCredentials() {
@@ -33,6 +35,7 @@ final class LoginViewModel: ObservableObject {
         } catch {
             alertMessage = "Une erreur inconnue est survenue."
             showAlert = true
+
         }
     }
     

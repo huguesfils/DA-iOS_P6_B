@@ -20,7 +20,7 @@ struct LoginView: View {
                     Task {
                         await viewModel.login()
                         if viewModel.isLogged {
-                            isLogged = true
+                            $isLogged = true
                         }
                     }
                 } label: {
