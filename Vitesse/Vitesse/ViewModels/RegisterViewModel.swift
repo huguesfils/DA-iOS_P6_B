@@ -21,7 +21,7 @@ final class RegisterViewModel: ObservableObject {
     }
     
     func register() async {
-        if let error = validateCredentials() {
+        if let error = ValidateCredentialsHelperError.validateCredentials(email: email, firstName: firstName, lastName: lastName, password: password, confirmPassword: confirmPassword) {
             alertMessage = error.errorMessage
             showAlert = true
             return
@@ -58,27 +58,5 @@ final class RegisterViewModel: ObservableObject {
             showAlert = true
         }
     }
-    
-    private func isValidEmail(_ email: String) -> Bool {
-        let emailRegex = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}$"
-        return NSPredicate(format:"SELF MATCHES %@", emailRegex).evaluate(with: email)
-    }
-    
-    private func validateCredentials() -> VitesseError? {
-        guard isValidEmail(email) else {
-            return .invalidEmail
-        }
-        guard !firstName.isEmpty || !lastName.isEmpty else {
-            return .enterValue
-        }
-        guard !password.isEmpty else {
-            return .emptyPassword
-        }
-        guard password == confirmPassword else {
-            return .passwordMismatch
-        }
-        return nil
-    }
-    
-    // TODO: enum helper avec static func + revoir defer
+
 }
