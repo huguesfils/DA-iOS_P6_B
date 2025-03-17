@@ -1,59 +1,67 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var email = ""
-    @State private var password = ""
-    @State private var showRegister = false
-
+    @State private var viewModel: LoginViewModel
+    
+    init(isLogged: Binding<Bool>) {
+        self._viewModel = State(wrappedValue: LoginViewModel(isLogged: isLogged))
+    }
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
+                Spacer()
                 Text("Login")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.bottom, 40)
-
-                AuthTextField(placeholder: "Email", text: $email)
-                AuthTextField(placeholder: "Password", text: $password, isSecure: true)
-
-                Button(action: {
-                   
-                }) {
-                    Text("Se connecter")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
+                
+                AuthTextField(placeholder: "Email", text: $viewModel.email)
+                AuthTextField(placeholder: "Password", text: $viewModel.password, isSecure: true)
+                
+                Button {
+                    Task {
+                        await viewModel.login()
+                    }
+                } label: {
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                    } else {
+                        Text("Se connecter")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
                 }
-                .padding(.top, 20)
-
+                .padding(20)
+                
                 Spacer()
-
-                Button(action: {
-                    showRegister = true
-                }) {
-                    Text("Pas encore inscrit ? S'enregistrer")
-                        .foregroundColor(.blue)
-                        .font(.footnote)
-                }
-                .padding(.bottom, 10)
-
+                
                 NavigationLink(
-                    destination: RegisterView(),
-                    isActive: $showRegister,
+                    destination: RegisterView(isLogged: viewModel.$isLogged),
                     label: {
-                        EmptyView()
+                        Text("Pas encore inscrit ? S'enregistrer")
+                            .foregroundColor(.blue)
+                            .font(.footnote)
                     }
                 )
+                .padding(.bottom, 10)
             }
-            .navigationTitle("")
+            .navigationTitle("Login")
             .navigationBarHidden(true)
+        }
+        .alert(isPresented: $viewModel.showAlert) {
+            Alert(title: Text("Erreur"),
+                  message: Text(viewModel.alertMessage),
+                  dismissButton: .default(Text("OK"))
+            )
         }
     }
 }
-
 #Preview {
-    LoginView()
+    LoginView(isLogged: .constant(true))
 }
