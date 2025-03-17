@@ -13,7 +13,7 @@ final class RegisterViewModel: ObservableObject {
     
     @Binding var isLogged: Bool
     
-    private let networkService = NetworkService.shared
+    private let networkService = NetworkService()
     private let tokenManager = TokenManager.shared
     
     init(isLogged: Binding<Bool>) {
@@ -21,7 +21,7 @@ final class RegisterViewModel: ObservableObject {
     }
     
     func register() async {
-        if let error = ValidateCredentialsHelperError.validateCredentials(email: email, firstName: firstName, lastName: lastName, password: password, confirmPassword: confirmPassword) {
+        if let error = ValidateCredentialsHelper.validateCredentials(email: email, firstName: firstName, lastName: lastName, password: password, confirmPassword: confirmPassword) {
             alertMessage = error.errorMessage
             showAlert = true
             return

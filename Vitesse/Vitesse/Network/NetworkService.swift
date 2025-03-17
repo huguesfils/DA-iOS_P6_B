@@ -1,8 +1,13 @@
 import SwiftUI
 
+// MARK: Protocol
+protocol NetworkServiceInterface {
+    func sendRequest<T: Decodable & Sendable>(endpoint: APIEndpoint) async throws -> T
+    func sendVoidRequest(endpoint: APIEndpoint) async throws
+}
+
+// MARK: Network service
 actor NetworkService: NetworkServiceInterface {
-    static let shared = NetworkService()
-    
     private var authToken: String?
     private let baseURL = "http://127.0.0.1:8080"
     private let session: URLSession
@@ -88,10 +93,4 @@ actor NetworkService: NetworkServiceInterface {
             return VitesseError.unknownError(statusCode: httpStatusCode)
         }
     }
-}
-
-// MARK: Protocol
-protocol NetworkServiceInterface {
-    func sendRequest<T: Decodable & Sendable>(endpoint: APIEndpoint) async throws -> T
-    func sendVoidRequest(endpoint: APIEndpoint) async throws
 }

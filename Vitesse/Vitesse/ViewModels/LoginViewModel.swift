@@ -10,15 +10,15 @@ final class LoginViewModel: ObservableObject {
     
     @Binding var isLogged: Bool
     
-    private let networkService = NetworkService.shared
+    private let networkService = NetworkService()
     private let tokenManager = TokenManager.shared
     
     init(isLogged: Binding<Bool>) {
-           self._isLogged = isLogged
-       }
+        self._isLogged = isLogged
+    }
     
     func login() async {
-        if let error = ValidateCredentialsHelperError.validateCredentials(email: email, password: password) {
+        if let error = ValidateCredentialsHelper.validateCredentials(email: email, password: password) {
             alertMessage = error.errorMessage
             showAlert = true
             return
@@ -39,7 +39,7 @@ final class LoginViewModel: ObservableObject {
         } catch {
             alertMessage = "Une erreur inconnue est survenue."
             showAlert = true
-
+            
         }
     }
 }
