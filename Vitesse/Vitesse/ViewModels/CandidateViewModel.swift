@@ -3,7 +3,7 @@ import SwiftUI
 @MainActor
 final class CandidateViewModel: ObservableObject {
     private let tokenManager = TokenManager.shared
-    private var isLogged: Binding<Bool>
+    @Binding private var isLogged: Bool
     
     @Published var candidates: [Candidate] = [
         Candidate(firstName: "Jean", lastName: "Dupont", isFavorite: false),
@@ -22,11 +22,11 @@ final class CandidateViewModel: ObservableObject {
     }
     
     init(isLogged: Binding<Bool>) {
-        self.isLogged = isLogged
+        self._isLogged = isLogged
     }
     
     func logout() async {
         await tokenManager.clearAuthToken()
-        isLogged.wrappedValue = false
+        isLogged = false
     }
 }

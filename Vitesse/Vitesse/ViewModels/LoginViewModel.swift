@@ -14,8 +14,8 @@ final class LoginViewModel: ObservableObject {
     private let tokenManager = TokenManager.shared
     
     init(isLogged: Binding<Bool>) {
-           self._isLogged = isLogged
-       }
+        self._isLogged = isLogged
+    }
     
     func login() async {
         if let error = ValidateCredentialsHelperError.validateCredentials(email: email, password: password) {
@@ -39,7 +39,6 @@ final class LoginViewModel: ObservableObject {
         } catch {
             alertMessage = "Une erreur inconnue est survenue."
             showAlert = true
-
         }
     }
 }

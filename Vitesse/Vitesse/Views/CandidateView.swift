@@ -30,7 +30,6 @@ struct CandidateView: View {
                     }) {
                         Image(systemName: "rectangle.portrait.and.arrow.right")
                     }
-                   
                 }
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button(action: {
