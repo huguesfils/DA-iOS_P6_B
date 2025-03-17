@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct RegisterView: View {
-    @StateObject private var viewModel: RegisterViewModel
+    @State private var viewModel: RegisterViewModel
     
     init(isLogged: Binding<Bool>) {
-        self._viewModel = StateObject(wrappedValue: RegisterViewModel(isLogged: isLogged))
+        self._viewModel = State(wrappedValue: RegisterViewModel(isLogged: isLogged))
     }
     
     var body: some View {

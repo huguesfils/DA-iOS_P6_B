@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct LoginView: View {
-    @StateObject private var viewModel: LoginViewModel
+    @State private var viewModel: LoginViewModel
     
     init(isLogged: Binding<Bool>) {
-        self._viewModel = StateObject(wrappedValue: LoginViewModel(isLogged: isLogged))
+        self._viewModel = State(wrappedValue: LoginViewModel(isLogged: isLogged))
     }
     
     var body: some View {

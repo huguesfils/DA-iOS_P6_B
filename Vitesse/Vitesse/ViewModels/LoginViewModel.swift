@@ -1,13 +1,14 @@
 import SwiftUI
 
-@MainActor
-final class LoginViewModel: ObservableObject {
-    @Published var email = ""
-    @Published var password = ""
-    @Published var showAlert = false
-    @Published var isLoading = false
-    @Published var alertMessage: String = ""
+@MainActor @Observable
+final class LoginViewModel {
+    var email = ""
+    var password = ""
+    var showAlert = false
+    var isLoading = false
+    var alertMessage: String = ""
     
+    @ObservationIgnored
     @Binding var isLogged: Bool
     
     private let networkService = NetworkService()
