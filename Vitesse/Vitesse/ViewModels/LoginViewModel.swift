@@ -1,16 +1,17 @@
 import SwiftUI
 
-@MainActor
-final class LoginViewModel: ObservableObject {
-    @Published var email = ""
-    @Published var password = ""
-    @Published var showAlert = false
-    @Published var isLoading = false
-    @Published var alertMessage: String = ""
+@MainActor @Observable
+final class LoginViewModel {
+    var email = ""
+    var password = ""
+    var showAlert = false
+    var isLoading = false
+    var alertMessage: String = ""
     
+    @ObservationIgnored
     @Binding var isLogged: Bool
     
-    private let networkService = NetworkService.shared
+    private let networkService = NetworkService()
     private let tokenManager = TokenManager.shared
     
     init(isLogged: Binding<Bool>) {
@@ -18,7 +19,7 @@ final class LoginViewModel: ObservableObject {
     }
     
     func login() async {
-        if let error = ValidateCredentialsHelperError.validateCredentials(email: email, password: password) {
+        if let error = ValidateCredentialsHelper.validateCredentials(email: email, password: password) {
             alertMessage = error.errorMessage
             showAlert = true
             return
@@ -39,6 +40,7 @@ final class LoginViewModel: ObservableObject {
         } catch {
             alertMessage = "Une erreur inconnue est survenue."
             showAlert = true
+            
         }
     }
 }

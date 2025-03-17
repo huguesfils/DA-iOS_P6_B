@@ -1,19 +1,20 @@
 import SwiftUI
 
-@MainActor
-final class RegisterViewModel: ObservableObject {
-    @Published var firstName = ""
-    @Published var lastName = ""
-    @Published var email = ""
-    @Published var password = ""
-    @Published var confirmPassword = ""
-    @Published var isLoading = false
-    @Published var showAlert = false
-    @Published var alertMessage: String = ""
+@MainActor @Observable
+final class RegisterViewModel {
+     var firstName = ""
+     var lastName = ""
+     var email = ""
+     var password = ""
+     var confirmPassword = ""
+     var isLoading = false
+     var showAlert = false
+     var alertMessage: String = ""
     
+    @ObservationIgnored
     @Binding var isLogged: Bool
     
-    private let networkService = NetworkService.shared
+    private let networkService = NetworkService()
     private let tokenManager = TokenManager.shared
     
     init(isLogged: Binding<Bool>) {
@@ -21,7 +22,7 @@ final class RegisterViewModel: ObservableObject {
     }
     
     func register() async {
-        if let error = ValidateCredentialsHelperError.validateCredentials(email: email, firstName: firstName, lastName: lastName, password: password, confirmPassword: confirmPassword) {
+        if let error = ValidateCredentialsHelper.validateCredentials(email: email, firstName: firstName, lastName: lastName, password: password, confirmPassword: confirmPassword) {
             alertMessage = error.errorMessage
             showAlert = true
             return
