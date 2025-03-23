@@ -3,11 +3,12 @@ import Foundation
 protocol TokenManagerInterface {
     func setAuthToken(_ token: String) async
     func clearAuthToken() async
+    func getAuthToken() async -> String?
 }
 
 actor TokenManager: TokenManagerInterface {
     static let shared = TokenManager()
-    
+
     private var authToken: String?
     
     fileprivate init() {}
@@ -18,5 +19,9 @@ actor TokenManager: TokenManagerInterface {
     
     func clearAuthToken() {
         self.authToken = nil
+    }
+    
+    func getAuthToken() -> String? {
+        return authToken
     }
 }

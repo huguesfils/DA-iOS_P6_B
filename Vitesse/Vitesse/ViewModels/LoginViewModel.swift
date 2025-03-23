@@ -40,7 +40,6 @@ final class LoginViewModel {
         } catch {
             alertMessage = "Une erreur inconnue est survenue."
             showAlert = true
-            
         }
     }
 }

@@ -17,6 +17,6 @@ struct CandidateCardView: View {
     }
 }
 
-#Preview {
-    CandidateCardView(candidate: Candidate(firstName: "John", lastName: "Doe", isFavorite: true))
-}
+//#Preview {
+//    CandidateCardView(candidate: Candidate(from: <#any Decoder#>))
+//}

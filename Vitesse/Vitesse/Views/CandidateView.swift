@@ -10,36 +10,39 @@ struct CandidateView: View {
                     ForEach(viewModel.filteredCandidates) { candidate in
                         CandidateCardView(candidate: candidate)
                     }
-                    .onDelete { indexSet in
-                        viewModel.candidates.remove(atOffsets: indexSet)
-                    }
                 }
                 .listStyle(.plain)
-                .searchable(text: $viewModel.searchText, prompt: "Search")
-      
-                Spacer()
+                .searchable(text: $viewModel.searchText, prompt: "Rechercher")
             }
             .padding()
-            .navigationTitle("Candidates")
-            .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
-                    Button(action: {
-                        Task {
-                            await viewModel.logout()
-                        }
-                    }) {
-                        Image(systemName: "rectangle.portrait.and.arrow.right")
-                    }
+            .navigationTitle("Candidats")
+            .alert(viewModel.alertMessage, isPresented: $viewModel.showAlert) {
+                Button("OK", role: .cancel) {}
+            }
+            .onAppear {
+                Task {
+                    await viewModel.fetchCandidates()
                 }
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button(action: {
-                        viewModel.showOnlyFavorites.toggle()
-                    }) {
-                        Image(systemName: viewModel.showOnlyFavorites ? "star.fill" : "star")
-                            .foregroundColor(viewModel.showOnlyFavorites ? .yellow : .gray)
+            }
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .topBarLeading) {
+                Button(action: {
+                    Task {
+                        await viewModel.logout()
                     }
-                    EditButton()
+                }) {
+                    Image(systemName: "rectangle.portrait.and.arrow.right")
                 }
+            }
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Button(action: {
+                    viewModel.showOnlyFavorites.toggle()
+                }) {
+                    Image(systemName: viewModel.showOnlyFavorites ? "star.fill" : "star")
+                        .foregroundColor(viewModel.showOnlyFavorites ? .yellow : .gray)
+                }
+                EditButton()
             }
         }
     }
