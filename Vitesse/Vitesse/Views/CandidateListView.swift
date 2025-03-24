@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CandidateListView: View {
-    @ObservedObject var viewModel: CandidateListViewModel
+    @State var viewModel: CandidateListViewModel
     
     var body: some View {
         NavigationStack {

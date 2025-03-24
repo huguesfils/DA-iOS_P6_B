@@ -1,7 +1,7 @@
 import SwiftUI
 
 @MainActor @Observable
-final class CandidateListViewModel: ObservableObject {
+final class CandidateListViewModel {
     private let networkService = NetworkService()
     private let tokenManager = TokenManager.shared
     @ObservationIgnored

@@ -1,7 +1,7 @@
 import SwiftUI
 
 @MainActor @Observable
-final class CreateCandidateViewModel: ObservableObject {
+final class CreateCandidateViewModel {
     var firstName: String = ""
     var lastName: String = ""
     var email: String = ""
