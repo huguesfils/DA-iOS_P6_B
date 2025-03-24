@@ -5,7 +5,7 @@ struct ContentView: View {
     
     var body: some View {
         if isLogged {
-            CandidateView(viewModel: CandidateViewModel(isLogged: $isLogged))
+            CandidateListView(viewModel: CandidateListViewModel(isLogged: $isLogged))
                 .navigationTransition(.automatic)
         } else {
             LoginView(isLogged: $isLogged)
