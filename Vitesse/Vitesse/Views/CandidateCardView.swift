@@ -16,7 +16,3 @@ struct CandidateCardView: View {
         .padding(.vertical, 8)
     }
 }
-
-//#Preview {
-//    CandidateCardView(candidate: Candidate(from: <#any Decoder#>))
-//}

@@ -28,35 +28,64 @@ final class CandidateListViewModel {
         do {
             let fetchedCandidates: [Candidate] = try await networkService.sendRequest(endpoint: .getCandidates)
             candidates = fetchedCandidates
-            print("Candidats récupérés: \(candidates)")
         } catch let error as VitesseError {
             alertMessage = error.errorMessage
             showAlert = true
-            print("Erreur: \(error.errorMessage)")
         } catch {
             alertMessage = "Une erreur inconnue est survenue."
             showAlert = true
-            print("Erreur inconnue: \(error.localizedDescription)")
         }
     }
     
+//    func deleteCandidate(at offsets: IndexSet) async {
+//        for index in offsets {
+//            let candidateToDelete = filteredCandidates[index]
+//            do {
+//                try await networkService.sendVoidRequest(endpoint: .deleteCandidate(candidateId: candidateToDelete.id))
+//                if let idx = candidates.firstIndex(of: candidateToDelete) {
+//                    candidates.remove(at: idx)
+//                }
+//                print("Candidat supprimé: \(candidateToDelete)")
+//            } catch let error as VitesseError {
+//                alertMessage = error.errorMessage
+//                showAlert = true
+//                print("Erreur lors de la suppression: \(error.errorMessage)")
+//            } catch {
+//                alertMessage = VitesseError.candidateDeletionFailed.errorMessage
+//                showAlert = true
+//                print("Erreur inconnue lors de la suppression: \(error.localizedDescription)")
+//            }
+//        }
+//    }
+    
     func deleteCandidate(at offsets: IndexSet) async {
-        for index in offsets {
-            let candidateToDelete = filteredCandidates[index]
-            do {
-                try await networkService.sendVoidRequest(endpoint: .deleteCandidate(candidateId: candidateToDelete.id))
-                if let idx = candidates.firstIndex(of: candidateToDelete) {
-                    candidates.remove(at: idx)
+        await withTaskGroup(of: (Candidate, Result<Void, Error>).self) { group in
+            for index in offsets {
+                let candidateToDelete = filteredCandidates[index]
+                group.addTask {
+                    do {
+                        try await self.networkService.sendVoidRequest(endpoint: .deleteCandidate(candidateId: candidateToDelete.id))
+                        return (candidateToDelete, .success(()))
+                    } catch {
+                        return (candidateToDelete, .failure(error))
+                    }
                 }
-                print("Candidat supprimé: \(candidateToDelete)")
-            } catch let error as VitesseError {
-                alertMessage = error.errorMessage
-                showAlert = true
-                print("Erreur lors de la suppression: \(error.errorMessage)")
-            } catch {
-                alertMessage = VitesseError.candidateDeletionFailed.errorMessage
-                showAlert = true
-                print("Erreur inconnue lors de la suppression: \(error.localizedDescription)")
+            }
+            
+            for await (candidate, result) in group {
+                switch result {
+                case .success:
+                    if let idx = candidates.firstIndex(of: candidate) {
+                        candidates.remove(at: idx)
+                    }
+                case .failure(let error):
+                    if let vitesseError = error as? VitesseError {
+                        alertMessage = vitesseError.errorMessage
+                    } else {
+                        alertMessage = VitesseError.candidateDeletionFailed.errorMessage
+                    }
+                    showAlert = true
+                }
             }
         }
     }

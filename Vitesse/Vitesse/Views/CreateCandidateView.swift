@@ -8,16 +8,21 @@ struct CreateCandidateView: View {
         NavigationStack {
             Form {
                 Section(header: Text("Informations personnelles")) {
-                    TextField("Prénom", text: $viewModel.firstName)
-                    TextField("Nom", text: $viewModel.lastName)
+                    TextField("Prénom *", text: $viewModel.firstName)
+                        .textInputAutocapitalization(.never)
+                    TextField("Nom *", text: $viewModel.lastName)
+                        .textInputAutocapitalization(.never)
                 }
                 Section(header: Text("Contact")) {
-                    TextField("Email", text: $viewModel.email)
+                    TextField("Email *", text: $viewModel.email)
+                        .textInputAutocapitalization(.never)
                     TextField("Téléphone", text: $viewModel.phone)
                 }
                 Section(header: Text("Informations supplémentaires")) {
                     TextField("Note", text: $viewModel.note)
+                        .textInputAutocapitalization(.never)
                     TextField("LinkedIn URL", text: $viewModel.linkedinURL)
+                        .textInputAutocapitalization(.never)
                 }
                 Section {
                     Button("Créer") {
@@ -28,7 +33,7 @@ struct CreateCandidateView: View {
                             }
                         }
                     }
-                    .disabled(viewModel.firstName.isEmpty || viewModel.lastName.isEmpty || viewModel.email.isEmpty || viewModel.phone.isEmpty)
+                    .disabled(viewModel.firstName.isEmpty || viewModel.lastName.isEmpty || viewModel.email.isEmpty)
                 }
             }
             .navigationTitle("Créer un candidat")

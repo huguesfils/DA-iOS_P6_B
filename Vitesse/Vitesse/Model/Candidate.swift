@@ -1,12 +1,14 @@
 import SwiftUI
 
 struct Candidate: Identifiable, Equatable, Decodable {
-    var id: String
-    var firstName: String
-    var lastName: String
-    var email: String
-    var phone: String?
-    var note: String?
-    var linkedinURL: String?
-    var isFavorite: Bool
+    let id: String
+    let firstName: String
+    let lastName: String
+    let email: String
+    let phone: String?
+    let note: String?
+    let linkedinURL: String?
+    let isFavorite: Bool
+    
+    //active record pattern isFavorite ?
 }

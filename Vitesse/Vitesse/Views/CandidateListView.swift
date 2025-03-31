@@ -8,7 +8,11 @@ struct CandidateListView: View {
             VStack {
                 List {
                     ForEach(viewModel.filteredCandidates) { candidate in
-                        CandidateCardView(candidate: candidate)
+                        NavigationLink(destination: CandidateDetailView(
+                            viewModel: CandidateDetailViewModel(candidate: candidate, isAdmin: false)
+                        )) {
+                            CandidateCardView(candidate: candidate)
+                        }
                     }
                     .onDelete { offsets in
                         Task {
