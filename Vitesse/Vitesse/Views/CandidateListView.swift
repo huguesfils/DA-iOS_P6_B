@@ -23,6 +23,7 @@ struct CandidateListView: View {
                 .listStyle(.plain)
                 .searchable(text: $viewModel.searchText, prompt: "Rechercher")
                 
+                //TODO: Sheet
                 NavigationLink(destination: CreateCandidateView()) {
                     Text("Créer un candidat")
                         .frame(maxWidth: .infinity)
