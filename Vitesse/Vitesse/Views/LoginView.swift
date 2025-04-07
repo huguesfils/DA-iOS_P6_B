@@ -16,8 +16,8 @@ struct LoginView: View {
                     .fontWeight(.bold)
                     .padding(.bottom, 40)
                 
-                AuthTextField(placeholder: "Email", text: $viewModel.email)
-                AuthTextField(placeholder: "Password", text: $viewModel.password, isSecure: true)
+                AuthTextField(text: $viewModel.email, placeholder: "Email")
+                AuthTextField(text: $viewModel.password, placeholder: "Password", isSecure: true)
                 
                 Button {
                     Task {

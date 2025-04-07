@@ -58,9 +58,6 @@ actor NetworkService: NetworkServiceInterface {
         
         if let token = await self.tokenManager.authToken, !token.isEmpty {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            print("Header Authorization: Bearer \(token)")
-        } else {
-            print("Aucun token dans le header pour \(endpoint)")
         }
         
         if let body = endpoint.body {

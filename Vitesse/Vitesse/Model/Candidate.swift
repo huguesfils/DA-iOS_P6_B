@@ -9,6 +9,4 @@ struct Candidate: Identifiable, Equatable, Decodable {
     let note: String?
     let linkedinURL: String?
     let isFavorite: Bool
-    
-    //active record pattern isFavorite ?
 }

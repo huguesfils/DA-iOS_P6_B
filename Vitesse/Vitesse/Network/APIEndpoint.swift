@@ -6,6 +6,8 @@ enum APIEndpoint {
     case getCandidates
     case createCandidate(email: String, note: String?, linkedinURL: String?, firstName: String, lastName: String, phone: String)
     case deleteCandidate(candidateId: String)
+    case updateCandidate(candidateId: String, email: String, note: String?, linkedinURL: String?, firstName: String, lastName: String, phone: String?)
+    case toggleFavorite(candidateId: String)
     
     var path: String {
         switch self {
@@ -17,17 +19,23 @@ enum APIEndpoint {
             return "/candidate"
         case .deleteCandidate(let candidateId):
             return "/candidate/\(candidateId)"
+        case .updateCandidate(let id, _, _, _, _, _, _):
+            return "/candidate/\(id)"
+        case .toggleFavorite(let id):
+            return "/candidate/\(id)/favorite"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .auth, .register, .createCandidate:
+        case .auth, .register, .createCandidate, .toggleFavorite:
             return .post
         case .getCandidates:
             return .get
         case .deleteCandidate:
             return .delete
+        case .updateCandidate:
+            return .put
         }
     }
     
@@ -48,6 +56,17 @@ enum APIEndpoint {
                 "lastName": lastName,
                 "phone": phone
             ]
+        case .updateCandidate(_, let email, let note, let linkedinURL, let firstName, let lastName, let phone):
+            return [
+                "email": email,
+                "note": note,
+                "linkedinURL": linkedinURL,
+                "firstName": firstName,
+                "lastName": lastName,
+                "phone": phone
+            ]
+        case .toggleFavorite:
+            return nil
         }
     }
     
@@ -55,14 +74,15 @@ enum APIEndpoint {
         switch self {
         case .auth, .register:
             return false
-        case .getCandidates, .createCandidate, .deleteCandidate:
+        case .getCandidates, .createCandidate, .deleteCandidate, .updateCandidate, .toggleFavorite:
             return true
         }
     }
-}
-
-enum HTTPMethod: String {
-    case get = "GET"
-    case post = "POST"
-    case delete = "DELETE"
+    
+    enum HTTPMethod: String {
+        case get = "GET"
+        case post = "POST"
+        case delete = "DELETE"
+        case put = "PUT"
+    }
 }

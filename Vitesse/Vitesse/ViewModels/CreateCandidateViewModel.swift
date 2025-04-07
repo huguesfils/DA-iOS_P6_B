@@ -2,6 +2,8 @@ import SwiftUI
 
 @MainActor @Observable
 final class CreateCandidateViewModel {
+    private let networkService = NetworkService()
+    
     var firstName: String = ""
     var lastName: String = ""
     var email: String = ""
@@ -12,8 +14,6 @@ final class CreateCandidateViewModel {
     var isLoading: Bool = false
     var showAlert: Bool = false
     var alertMessage: String = ""
-    
-    private let networkService = NetworkService()
     
     func createCandidate() async {
             isLoading = true
@@ -30,7 +30,6 @@ final class CreateCandidateViewModel {
                         phone: phone
                     )
                 )
-                print("Candidate created: \(candidate)")
             } catch let error as VitesseError {
                 alertMessage = error.errorMessage
                 showAlert = true

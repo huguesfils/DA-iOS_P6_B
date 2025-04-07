@@ -9,7 +9,7 @@ struct CandidateListView: View {
                 List {
                     ForEach(viewModel.filteredCandidates) { candidate in
                         NavigationLink(destination: CandidateDetailView(
-                            viewModel: CandidateDetailViewModel(candidate: candidate, isAdmin: false)
+                            viewModel: CandidateDetailViewModel(candidate: candidate, isAdmin: viewModel.isAdmin)
                         )) {
                             CandidateCardView(candidate: candidate)
                         }

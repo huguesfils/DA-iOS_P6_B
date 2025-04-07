@@ -4,15 +4,16 @@ import SwiftUI
 final class CandidateListViewModel {
     private let networkService = NetworkService()
     private let tokenManager = TokenManager.shared
+    
     @ObservationIgnored
     @Binding private var isLogged: Bool
     
     var searchText = ""
     var showOnlyFavorites = false
     var candidates: [Candidate] = []
+    var isAdmin: Bool = false
     var alertMessage: String = ""
     var showAlert = false
-    
     var filteredCandidates: [Candidate] {
         candidates.filter { candidate in
             (searchText.isEmpty || "\(candidate.firstName) \(candidate.lastName)".localizedCaseInsensitiveContains(searchText)) &&
@@ -26,6 +27,7 @@ final class CandidateListViewModel {
     
     func fetchCandidates() async {
         do {
+            self.isAdmin = await tokenManager.isAdmin
             let fetchedCandidates: [Candidate] = try await networkService.sendRequest(endpoint: .getCandidates)
             candidates = fetchedCandidates
         } catch let error as VitesseError {

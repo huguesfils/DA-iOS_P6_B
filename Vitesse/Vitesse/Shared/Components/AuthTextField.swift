@@ -1,8 +1,9 @@
 import SwiftUI
 
 struct AuthTextField: View {
-    let placeholder: String
     @Binding var text: String
+    
+    let placeholder: String
     var isSecure: Bool = false
     
     var body: some View {
@@ -24,5 +25,5 @@ struct AuthTextField: View {
 }
 
 #Preview {
-    AuthTextField(placeholder: "Email", text: .constant(""))
+    AuthTextField(text: .constant(""), placeholder: "Email")
 }

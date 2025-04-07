@@ -14,11 +14,11 @@ struct RegisterView: View {
                 .fontWeight(.bold)
                 .padding(.bottom, 40)
             
-            AuthTextField(placeholder: "First name", text: $viewModel.firstName)
-            AuthTextField(placeholder: "Last name", text: $viewModel.lastName)
-            AuthTextField(placeholder: "Email", text: $viewModel.email)
-            AuthTextField(placeholder: "Password", text: $viewModel.password, isSecure: true)
-            AuthTextField(placeholder: "Confirm password", text: $viewModel.confirmPassword, isSecure: true)
+            AuthTextField(text: $viewModel.firstName, placeholder: "First name")
+            AuthTextField(text: $viewModel.lastName, placeholder: "Last name")
+            AuthTextField(text: $viewModel.email, placeholder: "Email")
+            AuthTextField(text: $viewModel.password, placeholder: "Password", isSecure: true)
+            AuthTextField(text: $viewModel.confirmPassword, placeholder: "Confirm password", isSecure: true)
             
             Button(action: {
                 Task {

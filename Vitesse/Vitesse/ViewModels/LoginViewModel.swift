@@ -2,17 +2,17 @@ import SwiftUI
 
 @MainActor @Observable
 final class LoginViewModel {
+    private let networkService = NetworkService()
+    private let tokenManager = TokenManager.shared
+    
+    @ObservationIgnored
+    @Binding var isLogged: Bool
+    
     var email = ""
     var password = ""
     var showAlert = false
     var isLoading = false
     var alertMessage: String = ""
-    
-    @ObservationIgnored
-    @Binding var isLogged: Bool
-    
-    private let networkService = NetworkService()
-    private let tokenManager = TokenManager.shared
     
     init(isLogged: Binding<Bool>) {
         self._isLogged = isLogged
@@ -32,7 +32,7 @@ final class LoginViewModel {
             let response: AuthResponse = try await networkService.sendRequest(
                 endpoint: APIEndpoint.auth(email: email, password: password)
             )
-            await tokenManager.setAuthToken(response.token)
+            await tokenManager.setAuth(token: response.token, isAdmin: response.isAdmin)
             self.isLogged = true
         } catch let error as VitesseError {
             alertMessage = error.errorMessage
