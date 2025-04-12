@@ -2,7 +2,7 @@ import SwiftUI
 
 @MainActor @Observable
 final class CandidateListViewModel {
-    private let networkService = NetworkService()
+    private let networkService : NetworkServiceInterface
     private let tokenManager = TokenManager.shared
     
     @ObservationIgnored
@@ -21,8 +21,9 @@ final class CandidateListViewModel {
         }
     }
     
-    init(isLogged: Binding<Bool>) {
+    init(isLogged: Binding<Bool>, networkService: NetworkServiceInterface = NetworkService()) {
         self._isLogged = isLogged
+        self.networkService = networkService
     }
     
     func fetchCandidates() async {
@@ -34,7 +35,7 @@ final class CandidateListViewModel {
             alertMessage = error.errorMessage
             showAlert = true
         } catch {
-            alertMessage = "Une erreur inconnue est survenue."
+            alertMessage = "An unknown error occurred."
             showAlert = true
         }
     }
@@ -42,6 +43,7 @@ final class CandidateListViewModel {
     func deleteCandidate(at offsets: IndexSet) async {
         await withTaskGroup(of: (Candidate, Result<Void, Error>).self) { group in
             for index in offsets {
+                guard filteredCandidates.indices.contains(index) else { continue }
                 let candidateToDelete = filteredCandidates[index]
                 group.addTask {
                     do {

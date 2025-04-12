@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CandidateListView: View {
     @State var viewModel: CandidateListViewModel
+    @State private var showAddCandidate: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -21,48 +22,53 @@ struct CandidateListView: View {
                     }
                 }
                 .listStyle(.plain)
-                .searchable(text: $viewModel.searchText, prompt: "Rechercher")
+                .searchable(text: $viewModel.searchText, prompt: "Search")
                 
-                //TODO: Sheet
-                NavigationLink(destination: CreateCandidateView()) {
-                    Text("Créer un candidat")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                
+                Button("Create candidate") {
+                    showAddCandidate = true
                 }
-                .padding([.leading, .trailing, .bottom])
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
             }
-            .padding()
-            .navigationTitle("Candidats")
-            .alert(viewModel.alertMessage, isPresented: $viewModel.showAlert) {
-                Button("OK", role: .cancel) {}
+            .padding([.leading, .trailing, .bottom])
+        }
+        .sheet(isPresented: $showAddCandidate){
+            CreateCandidateView()
+                .presentationDragIndicator(.visible)
+        }
+        
+        .padding()
+        .navigationTitle("Candidates")
+        .alert(viewModel.alertMessage, isPresented: $viewModel.showAlert) {
+            Button("OK", role: .cancel) {}
+        }
+        .onAppear {
+            Task {
+                await viewModel.fetchCandidates()
             }
-            .onAppear {
-                Task {
-                    await viewModel.fetchCandidates()
-                }
-            }
-            .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
-                    Button(action: {
-                        Task {
-                            await viewModel.logout()
-                        }
-                    }) {
-                        Image(systemName: "rectangle.portrait.and.arrow.right")
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .topBarLeading) {
+                Button(action: {
+                    Task {
+                        await viewModel.logout()
                     }
+                }) {
+                    Image(systemName: "rectangle.portrait.and.arrow.right")
                 }
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button(action: {
-                        viewModel.showOnlyFavorites.toggle()
-                    }) {
-                        Image(systemName: viewModel.showOnlyFavorites ? "star.fill" : "star")
-                            .foregroundColor(viewModel.showOnlyFavorites ? .yellow : .gray)
-                    }
-                    EditButton()
+            }
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Button(action: {
+                    viewModel.showOnlyFavorites.toggle()
+                }) {
+                    Image(systemName: viewModel.showOnlyFavorites ? "star.fill" : "star")
+                        .foregroundColor(viewModel.showOnlyFavorites ? .yellow : .gray)
                 }
+                EditButton()
             }
         }
     }

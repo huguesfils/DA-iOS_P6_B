@@ -2,7 +2,7 @@ import SwiftUI
 
 @MainActor @Observable
 final class CandidateDetailViewModel {
-    private let networkService = NetworkService()
+    private let networkService : NetworkServiceInterface
     
     var alertMessage: String = ""
     var showAlert = false
@@ -16,10 +16,11 @@ final class CandidateDetailViewModel {
     var editedNote: String
     let isAdmin: Bool
     
-    init(candidate: Candidate, isAdmin: Bool) {
+    init(candidate: Candidate, isAdmin: Bool, networkService: NetworkServiceInterface = NetworkService()) {
         self.candidate = candidate
         self.isAdmin = isAdmin
-
+        self.networkService = networkService
+        
         self.editedFirstName = candidate.firstName
         self.editedLastName = candidate.lastName
         self.editedEmail = candidate.email
@@ -61,7 +62,7 @@ final class CandidateDetailViewModel {
                 alertMessage = error.errorMessage
                 showAlert = true
             } catch {
-                alertMessage = "Une erreur inconnue est survenue."
+                alertMessage = "An unknown error occurred."
                 showAlert = true
             }
         }
@@ -78,7 +79,7 @@ final class CandidateDetailViewModel {
                 alertMessage = error.errorMessage
                 showAlert = true
             } catch {
-                alertMessage = "Une erreur inconnue est survenue."
+                alertMessage = "An unknown error occurred."
                 showAlert = true
             }
         }
