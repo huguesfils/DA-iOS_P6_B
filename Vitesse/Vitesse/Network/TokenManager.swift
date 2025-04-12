@@ -1,22 +1,20 @@
 import Foundation
 
-protocol TokenManagerInterface {
-    func setAuthToken(_ token: String) async
-    func clearAuthToken() async
-}
-
-actor TokenManager: TokenManagerInterface {
+actor TokenManager {
     static let shared = TokenManager()
-    
-    private var authToken: String?
-    
+
+    var authToken: String?
+    var isAdmin: Bool = false
+
     fileprivate init() {}
-    
-    func setAuthToken(_ token: String) {
+
+    func setAuth(token: String, isAdmin: Bool) {
         self.authToken = token
+        self.isAdmin = isAdmin
     }
-    
+
     func clearAuthToken() {
         self.authToken = nil
+        self.isAdmin = false
     }
 }

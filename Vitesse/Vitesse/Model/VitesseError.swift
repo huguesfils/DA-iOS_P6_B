@@ -16,6 +16,9 @@ enum VitesseError: Error {
     case passwordMismatch
     case enterValue
     
+    case candidateCreationFailed
+    case candidateDeletionFailed
+    
     var errorMessage: String {
         switch self {
         case .badURL:
@@ -44,6 +47,10 @@ enum VitesseError: Error {
             "Les mots de passe ne correspondent pas."
         case .enterValue:
             "Veuillez renseigner tout les champs."
+        case .candidateCreationFailed:
+            "La création du candidat a échoué."
+        case .candidateDeletionFailed:
+            "La suppression du candidat a échoué."
         }
     }
 }

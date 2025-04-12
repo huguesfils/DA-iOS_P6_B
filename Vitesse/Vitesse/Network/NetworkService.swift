@@ -8,9 +8,9 @@ protocol NetworkServiceInterface {
 
 // MARK: Network service
 actor NetworkService: NetworkServiceInterface {
-    private var authToken: String?
     private let baseURL = "http://127.0.0.1:8080"
     private let session: URLSession
+    private let tokenManager = TokenManager.shared
     
     init(session: URLSession = .shared) {
         self.session = session
@@ -19,8 +19,7 @@ actor NetworkService: NetworkServiceInterface {
     func sendRequest<T: Decodable & Sendable>(
         endpoint: APIEndpoint
     ) async throws -> T {
-        
-        let (data, httpStatusCode) = try await perform(endpoint: endpoint)
+        let (data, httpStatusCode): (Data, Int) = try await perform(endpoint: endpoint)
         
         switch httpStatusCode {
         case 200...299:
@@ -52,25 +51,25 @@ actor NetworkService: NetworkServiceInterface {
         guard let url = URL(string: baseURL + endpoint.path) else {
             throw VitesseError.badURL
         }
-
+        
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        if let token = authToken {
+        
+        if let token = await self.tokenManager.authToken, !token.isEmpty {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
-
+        
         if let body = endpoint.body {
             request.httpBody = try JSONEncoder().encode(body)
         }
-
+        
         let (data, response) = try await session.data(for: request)
-
+        
         guard let httpResponse = response as? HTTPURLResponse else {
             throw VitesseError.unknownError(statusCode: -1)
         }
-
+        
         return (data, httpResponse.statusCode)
     }
     

@@ -2,20 +2,20 @@ import SwiftUI
 
 @MainActor @Observable
 final class RegisterViewModel {
-     var firstName = ""
-     var lastName = ""
-     var email = ""
-     var password = ""
-     var confirmPassword = ""
-     var isLoading = false
-     var showAlert = false
-     var alertMessage: String = ""
+    private let networkService = NetworkService()
+    private let tokenManager = TokenManager.shared
     
     @ObservationIgnored
     @Binding var isLogged: Bool
     
-    private let networkService = NetworkService()
-    private let tokenManager = TokenManager.shared
+    var firstName = ""
+    var lastName = ""
+    var email = ""
+    var password = ""
+    var confirmPassword = ""
+    var isLoading = false
+    var showAlert = false
+    var alertMessage: String = ""
     
     init(isLogged: Binding<Bool>) {
         self._isLogged = isLogged
@@ -51,7 +51,7 @@ final class RegisterViewModel {
                 endpoint: .auth(email: email, password: password)
             )
             
-            await tokenManager.setAuthToken(response.token)
+            await tokenManager.setAuth(token: response.token, isAdmin: false)
             isLogged = true
             
         } catch {
@@ -59,5 +59,5 @@ final class RegisterViewModel {
             showAlert = true
         }
     }
-
+    
 }

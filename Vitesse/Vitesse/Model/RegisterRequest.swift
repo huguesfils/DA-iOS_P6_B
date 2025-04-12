@@ -6,4 +6,3 @@ struct RegisterRequestParams: Encodable {
     let firstName: String
     let lastName: String
 }
-
