@@ -5,7 +5,7 @@ struct CandidateDetailView: View {
 
     @ViewBuilder
     var body: some View {
-        NavigationStack {
+        
             Form {
                 nameSection
                 detailsSection
@@ -13,26 +13,28 @@ struct CandidateDetailView: View {
                     favoriteSection
                 }
             }
-            .navigationTitle("\(viewModel.candidate.firstName) \(viewModel.candidate.lastName)")
-            .alert(viewModel.alertMessage, isPresented: $viewModel.showAlert) {
-                Button("OK", role: .cancel) {}
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    if viewModel.isEditing {
-                        HStack {
-                            Button("Cancel") {
-                                viewModel.cancelEditing()
-                            }
-                            Spacer()
-                            Button("Done") {
-                                viewModel.doneEditing()
+        
+        .navigationTitle("\(viewModel.candidate.firstName) \(viewModel.candidate.lastName)")
+        .alert(viewModel.alertMessage, isPresented: $viewModel.showAlert) {
+            Button("OK", role: .cancel) {}
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                if viewModel.isEditing {
+                    HStack {
+                        Button("Cancel") {
+                            viewModel.cancelEditing()
+                        }
+                        Spacer()
+                        Button("Done") {
+                            Task {
+                                await viewModel.doneEditing()
                             }
                         }
-                    } else {
-                        Button("Edit") {
-                            viewModel.startEditing()
-                        }
+                    }
+                } else {
+                    Button("Edit") {
+                        viewModel.startEditing()
                     }
                 }
             }
@@ -98,7 +100,10 @@ struct CandidateDetailView: View {
     var favoriteSection: some View {
         Section {
             Button(action: {
-                viewModel.toggleFavorite()
+                Task {
+                    await viewModel.toggleFavorite()
+                }
+               
             }) {
                 HStack {
                     Image(systemName: viewModel.candidate.isFavorite ? "star.fill" : "star")
