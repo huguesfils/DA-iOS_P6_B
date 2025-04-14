@@ -2,7 +2,7 @@ import SwiftUI
 
 @MainActor @Observable
 final class LoginViewModel {
-    private let networkService = NetworkService()
+    private let networkService : NetworkServiceInterface
     private let tokenManager = TokenManager.shared
     
     @ObservationIgnored
@@ -14,8 +14,9 @@ final class LoginViewModel {
     var isLoading = false
     var alertMessage: String = ""
     
-    init(isLogged: Binding<Bool>) {
+    init(isLogged: Binding<Bool>, networkService: NetworkServiceInterface = NetworkService()) {
         self._isLogged = isLogged
+        self.networkService = networkService
     }
     
     func login() async {
@@ -38,7 +39,7 @@ final class LoginViewModel {
             alertMessage = error.errorMessage
             showAlert = true
         } catch {
-            alertMessage = "Une erreur inconnue est survenue."
+            alertMessage = "An unknown error occurred."
             showAlert = true
         }
     }

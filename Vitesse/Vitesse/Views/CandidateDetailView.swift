@@ -5,7 +5,7 @@ struct CandidateDetailView: View {
 
     @ViewBuilder
     var body: some View {
-        NavigationStack {
+        
             Form {
                 nameSection
                 detailsSection
@@ -13,26 +13,28 @@ struct CandidateDetailView: View {
                     favoriteSection
                 }
             }
-            .navigationTitle("\(viewModel.candidate.firstName) \(viewModel.candidate.lastName)")
-            .alert(viewModel.alertMessage, isPresented: $viewModel.showAlert) {
-                Button("OK", role: .cancel) {}
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    if viewModel.isEditing {
-                        HStack {
-                            Button("Cancel") {
-                                viewModel.cancelEditing()
-                            }
-                            Spacer()
-                            Button("Done") {
-                                viewModel.doneEditing()
+        
+        .navigationTitle("\(viewModel.candidate.firstName) \(viewModel.candidate.lastName)")
+        .alert(viewModel.alertMessage, isPresented: $viewModel.showAlert) {
+            Button("OK", role: .cancel) {}
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                if viewModel.isEditing {
+                    HStack {
+                        Button("Cancel") {
+                            viewModel.cancelEditing()
+                        }
+                        Spacer()
+                        Button("Done") {
+                            Task {
+                                await viewModel.doneEditing()
                             }
                         }
-                    } else {
-                        Button("Edit") {
-                            viewModel.startEditing()
-                        }
+                    }
+                } else {
+                    Button("Edit") {
+                        viewModel.startEditing()
                     }
                 }
             }
@@ -42,11 +44,11 @@ struct CandidateDetailView: View {
     // MARK: - Name
     @ViewBuilder
     var nameSection: some View {
-        Section(header: Text("Nom du candidat")) {
+        Section(header: Text("Candidate Name")) {
             if viewModel.isEditing {
-                TextField("Prénom", text: $viewModel.editedFirstName)
+                TextField("First Name", text: $viewModel.editedFirstName)
                     .textInputAutocapitalization(.never)
-                TextField("Nom", text: $viewModel.editedLastName)
+                TextField("Last Name", text: $viewModel.editedLastName)
                     .textInputAutocapitalization(.never)
             } else {
                 Text("\(viewModel.candidate.firstName) \(viewModel.candidate.lastName)")
@@ -58,11 +60,11 @@ struct CandidateDetailView: View {
     // MARK: - Details
     @ViewBuilder
     var detailsSection: some View {
-        Section(header: Text("Détails")) {
+        Section(header: Text("Details")) {
             if viewModel.isEditing {
-                TextField("Téléphone", text: $viewModel.editedPhone)
+                TextField("Phone", text: $viewModel.editedPhone)
                     .textInputAutocapitalization(.never)
-                TextField("E-mail", text: $viewModel.editedEmail)
+                TextField("Email", text: $viewModel.editedEmail)
                     .textInputAutocapitalization(.never)
                 TextField("LinkedIn", text: $viewModel.editedLinkedinURL)
                     .textInputAutocapitalization(.never)
@@ -70,12 +72,12 @@ struct CandidateDetailView: View {
                     .frame(height: 100)
             } else {
                 HStack {
-                    Text("Téléphone")
+                    Text("Phone")
                     Spacer()
                     Text(viewModel.candidate.phone ?? "-")
                 }
                 HStack {
-                    Text("E-mail")
+                    Text("Email")
                     Spacer()
                     Text(viewModel.candidate.email)
                 }
@@ -98,12 +100,15 @@ struct CandidateDetailView: View {
     var favoriteSection: some View {
         Section {
             Button(action: {
-                viewModel.toggleFavorite()
+                Task {
+                    await viewModel.toggleFavorite()
+                }
+               
             }) {
                 HStack {
                     Image(systemName: viewModel.candidate.isFavorite ? "star.fill" : "star")
                         .foregroundColor(viewModel.candidate.isFavorite ? .yellow : .gray)
-                    Text("Favoris")
+                    Text("Favorite")
                 }
             }
         }
@@ -111,5 +116,14 @@ struct CandidateDetailView: View {
 }
 
 #Preview {
-    CandidateDetailView(viewModel: CandidateDetailViewModel(candidate: Candidate(id: "", firstName: "Hugues", lastName: "Fils", email: "huguesfils@mail.com", phone: "0600000000", note: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius, neque eu efficitur aliquam, justo sem commodo risus, sed molestie quam est vitae erat. Praesent ut egestas nulla. Cras dictum, mauris ac tempor congue, dolor justo lobortis orci, eget tincidunt justo ex sit amet erat. Quisque luctus rhoncus est, ut finibus magna iaculis sed. Vestibulum condimentum nunc eu aliquam maximus. Aliquam at velit id lorem rutrum dignissim et quis nisl. ", linkedinURL: "linkedin@linkedin.com", isFavorite: true), isAdmin: true))
+    CandidateDetailView(viewModel: CandidateDetailViewModel(candidate: Candidate(
+        id: "",
+        firstName: "Hugues",
+        lastName: "Fils",
+        email: "huguesfils@mail.com",
+        phone: "0600000000",
+        note: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius, neque eu efficitur aliquam, justo sem commodo risus, sed molestie quam est vitae erat. Praesent ut egestas nulla. Cras dictum, mauris ac tempor congue, dolor justo lobortis orci, eget tincidunt justo ex sit amet erat. Quisque luctus rhoncus est, ut finibus magna iaculis sed. Vestibulum condimentum nunc eu aliquam maximus. Aliquam at velit id lorem rutrum dignissim et quis nisl. ",
+        linkedinURL: "linkedin@linkedin.com",
+        isFavorite: true
+    ), isAdmin: true))
 }

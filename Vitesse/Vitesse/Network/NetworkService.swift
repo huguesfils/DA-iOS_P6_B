@@ -1,7 +1,7 @@
 import SwiftUI
 
 // MARK: Protocol
-protocol NetworkServiceInterface {
+protocol NetworkServiceInterface: Sendable {
     func sendRequest<T: Decodable & Sendable>(endpoint: APIEndpoint) async throws -> T
     func sendVoidRequest(endpoint: APIEndpoint) async throws
 }

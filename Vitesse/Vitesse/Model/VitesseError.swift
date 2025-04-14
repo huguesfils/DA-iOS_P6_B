@@ -22,35 +22,35 @@ enum VitesseError: Error {
     var errorMessage: String {
         switch self {
         case .badURL:
-            "URL invalide."
+            "Invalid URL."
         case .unauthorized:
-            "Accès non autorisé. Veuillez vérifier vos identifiants."
+            "Unauthorized access. Please check your credentials."
         case .notFound:
-            "Ressource non trouvée."
+            "Resource not found."
         case .serverError:
-            "Erreur interne du serveur."
+            "Internal server error."
         case .decodingError:
-            "Erreur lors du décodage des données."
+            "Error decoding the data."
         case .unknownError(let statusCode):
-            "Erreur inconnue. Code de statut: \(statusCode)"
+            "Unknown error. Status code: \(statusCode)"
         case .customError(let message):
             message
         case .invalidEmail:
-            "Adresse e-mail invalide. Veuillez entrer une adresse e-mail valide."
+            "Invalid email address. Please enter a valid email."
         case .emptyPassword:
-            "Le champ mot de passe est vide. Veuillez entrer un mot de passe."
+            "Password field is empty. Please enter a password."
         case .invalidRecipient:
-            "Destinataire invalide. Veuillez entrer une adresse e-mail valide ou un numéro de téléphone français."
+            "Invalid recipient. Please enter a valid email or French phone number."
         case .invalidAmount:
-            "Montant invalide. Veuillez entrer un montant positif."
+            "Invalid amount. Please enter a positive number."
         case .passwordMismatch:
-            "Les mots de passe ne correspondent pas."
+            "Passwords do not match."
         case .enterValue:
-            "Veuillez renseigner tout les champs."
+            "Please fill in all fields."
         case .candidateCreationFailed:
-            "La création du candidat a échoué."
+            "Failed to create candidate."
         case .candidateDeletionFailed:
-            "La suppression du candidat a échoué."
+            "Failed to delete candidate."
         }
     }
 }

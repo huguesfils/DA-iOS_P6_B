@@ -2,11 +2,11 @@ import SwiftUI
 
 struct LoginView: View {
     @State private var viewModel: LoginViewModel
-    
+
     init(isLogged: Binding<Bool>) {
         self._viewModel = State(wrappedValue: LoginViewModel(isLogged: isLogged))
     }
-    
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
@@ -15,10 +15,10 @@ struct LoginView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.bottom, 40)
-                
+
                 AuthTextField(text: $viewModel.email, placeholder: "Email")
                 AuthTextField(text: $viewModel.password, placeholder: "Password", isSecure: true)
-                
+
                 Button {
                     Task {
                         await viewModel.login()
@@ -29,7 +29,7 @@ struct LoginView: View {
                             .frame(maxWidth: .infinity)
                             .padding()
                     } else {
-                        Text("Se connecter")
+                        Text("Sign In")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.blue)
@@ -38,13 +38,13 @@ struct LoginView: View {
                     }
                 }
                 .padding(20)
-                
+
                 Spacer()
-                
+
                 NavigationLink(
                     destination: RegisterView(isLogged: viewModel.$isLogged),
                     label: {
-                        Text("Pas encore inscrit ? S'enregistrer")
+                        Text("Not registered yet? Sign up")
                             .foregroundColor(.blue)
                             .font(.footnote)
                     }
@@ -55,13 +55,14 @@ struct LoginView: View {
             .navigationBarHidden(true)
         }
         .alert(isPresented: $viewModel.showAlert) {
-            Alert(title: Text("Erreur"),
+            Alert(title: Text("Error"),
                   message: Text(viewModel.alertMessage),
                   dismissButton: .default(Text("OK"))
             )
         }
     }
 }
+
 #Preview {
     LoginView(isLogged: .constant(true))
 }

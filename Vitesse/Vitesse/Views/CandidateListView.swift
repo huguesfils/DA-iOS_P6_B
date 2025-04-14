@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CandidateListView: View {
     @State var viewModel: CandidateListViewModel
+    @State private var showAddCandidate: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -21,21 +22,24 @@ struct CandidateListView: View {
                     }
                 }
                 .listStyle(.plain)
-                .searchable(text: $viewModel.searchText, prompt: "Rechercher")
+                .searchable(text: $viewModel.searchText, prompt: "Search")
                 
-                //TODO: Sheet
-                NavigationLink(destination: CreateCandidateView()) {
-                    Text("Créer un candidat")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                
+                Button("Create candidate") {
+                    showAddCandidate = true
                 }
-                .padding([.leading, .trailing, .bottom])
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
             }
-            .padding()
-            .navigationTitle("Candidats")
+            .padding([.leading, .trailing, .bottom])
+            .sheet(isPresented: $showAddCandidate){
+                CreateCandidateView()
+                    .presentationDragIndicator(.visible)
+            }
+            .navigationTitle("Candidates")
             .alert(viewModel.alertMessage, isPresented: $viewModel.showAlert) {
                 Button("OK", role: .cancel) {}
             }
@@ -65,6 +69,7 @@ struct CandidateListView: View {
                 }
             }
         }
+        
     }
 }
 
