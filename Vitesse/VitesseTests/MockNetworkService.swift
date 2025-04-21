@@ -1,12 +1,10 @@
 import Foundation
 @testable import Vitesse
 
-actor MockNetworkService: NetworkServiceInterface, @unchecked Sendable {
+actor MockNetworkService: NetworkServiceInterface {
     private var typedResponses: [String: Any] = [:]
     private var shouldThrowError: Bool = false
     private var errorToThrow: Error = VitesseError.unauthorized
-
-    // MARK: - Config
 
     func setResponse<T: Decodable & Sendable>(_ response: T, for type: T.Type = T.self) {
         let key = String(describing: type)
@@ -22,8 +20,6 @@ actor MockNetworkService: NetworkServiceInterface, @unchecked Sendable {
         typedResponses.removeAll()
     }
 
-    // MARK: - Protocol Impl
-
     func sendRequest<T: Decodable & Sendable>(endpoint: APIEndpoint) async throws -> T {
         if shouldThrowError {
             throw errorToThrow
@@ -31,11 +27,9 @@ actor MockNetworkService: NetworkServiceInterface, @unchecked Sendable {
 
         let key = String(describing: T.self)
         guard let value = typedResponses[key] as? T else {
-            print("💥 No mock response for type: \(T.self)")
             throw VitesseError.decodingError
         }
-
-        print("✅ Returning mocked response for \(T.self)")
+        
         return value
     }
 
