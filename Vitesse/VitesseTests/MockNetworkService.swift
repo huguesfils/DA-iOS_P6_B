@@ -5,7 +5,8 @@ actor MockNetworkService: NetworkServiceInterface {
     private var typedResponses: [String: Any] = [:]
     private var shouldThrowError: Bool = false
     private var errorToThrow: Error = VitesseError.unauthorized
-
+    
+    // MARK: - Config
     func setResponse<T: Decodable & Sendable>(_ response: T, for type: T.Type = T.self) {
         let key = String(describing: type)
         typedResponses[key] = response
@@ -19,7 +20,8 @@ actor MockNetworkService: NetworkServiceInterface {
     func clearResponses() {
         typedResponses.removeAll()
     }
-
+    
+    // MARK: - NetworkServiceInterface
     func sendRequest<T: Decodable & Sendable>(endpoint: APIEndpoint) async throws -> T {
         if shouldThrowError {
             throw errorToThrow

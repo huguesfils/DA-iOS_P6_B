@@ -17,9 +17,7 @@ struct CreateCandidateViewModelTests {
         
         
         let viewModel = CreateCandidateViewModel(networkService: mockService)
-        
-        
-        
+
         viewModel.firstName = "Jane"
         viewModel.lastName = "Doe"
         viewModel.email = "jane@mail.com"
