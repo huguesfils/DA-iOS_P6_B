@@ -2,7 +2,7 @@ import SwiftUI
 
 @MainActor @Observable
 final class CreateCandidateViewModel {
-    private let networkService = NetworkService()
+    private let networkService : NetworkServiceInterface
     
     var firstName: String = ""
     var lastName: String = ""
@@ -15,27 +15,31 @@ final class CreateCandidateViewModel {
     var showAlert: Bool = false
     var alertMessage: String = ""
     
+    init(networkService: NetworkServiceInterface = NetworkService()) {
+        self.networkService = networkService
+    }
+    
     func createCandidate() async {
-            isLoading = true
-            defer { isLoading = false }
-            
-            do {
-                let candidate: Candidate = try await networkService.sendRequest(
-                    endpoint: .createCandidate(
-                        email: email,
-                        note: note.isEmpty ? nil : note,
-                        linkedinURL: linkedinURL.isEmpty ? nil : linkedinURL,
-                        firstName: firstName,
-                        lastName: lastName,
-                        phone: phone
-                    )
+        isLoading = true
+        defer { isLoading = false }
+        
+        do {
+            let _ : Candidate = try await networkService.sendRequest(
+                endpoint: .createCandidate(
+                    email: email,
+                    note: note.isEmpty ? nil : note,
+                    linkedinURL: linkedinURL.isEmpty ? nil : linkedinURL,
+                    firstName: firstName,
+                    lastName: lastName,
+                    phone: phone
                 )
-            } catch let error as VitesseError {
-                alertMessage = error.errorMessage
-                showAlert = true
-            } catch {
-                alertMessage = VitesseError.candidateCreationFailed.errorMessage
-                showAlert = true
-            }
+            )
+        } catch let error as VitesseError {
+            alertMessage = error.errorMessage
+            showAlert = true
+        } catch {
+            alertMessage = VitesseError.candidateCreationFailed.errorMessage
+            showAlert = true
         }
+    }
 }

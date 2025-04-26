@@ -2,7 +2,7 @@ import SwiftUI
 
 @MainActor @Observable
 final class RegisterViewModel {
-    private let networkService = NetworkService()
+    private let networkService : NetworkServiceInterface
     private let tokenManager = TokenManager.shared
     
     @ObservationIgnored
@@ -17,8 +17,9 @@ final class RegisterViewModel {
     var showAlert = false
     var alertMessage: String = ""
     
-    init(isLogged: Binding<Bool>) {
+    init(isLogged: Binding<Bool>, networkService: NetworkServiceInterface = NetworkService()) {
         self._isLogged = isLogged
+        self.networkService = networkService
     }
     
     func register() async {
@@ -39,7 +40,7 @@ final class RegisterViewModel {
             isLoading = false
             showAlert = true
         } catch {
-            alertMessage = "Une erreur inconnue est survenue."
+            alertMessage = "An unknown error occurred."
             isLoading = false
             showAlert = true
         }
@@ -55,7 +56,7 @@ final class RegisterViewModel {
             isLogged = true
             
         } catch {
-            alertMessage = "Une erreur inconnue est survenue."
+            alertMessage = "An unknown error occurred."
             showAlert = true
         }
     }
