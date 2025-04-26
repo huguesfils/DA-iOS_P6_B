@@ -35,9 +35,13 @@ struct CandidateListView: View {
                 .cornerRadius(8)
             }
             .padding([.leading, .trailing, .bottom])
-            .sheet(isPresented: $showAddCandidate){
-                CreateCandidateView()
-                    .presentationDragIndicator(.visible)
+            .sheet(isPresented: $showAddCandidate) {
+                CreateCandidateView(onCandidateCreated: {
+                    Task {
+                        await viewModel.fetchCandidates()
+                    }
+                })
+                .presentationDragIndicator(.visible)
             }
             .navigationTitle("Candidates")
             .alert(viewModel.alertMessage, isPresented: $viewModel.showAlert) {

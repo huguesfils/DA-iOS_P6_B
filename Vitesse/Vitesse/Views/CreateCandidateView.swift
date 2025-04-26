@@ -3,6 +3,7 @@ import SwiftUI
 struct CreateCandidateView: View {
     @State private var viewModel = CreateCandidateViewModel()
     @Environment(\.dismiss) var dismiss
+    var onCandidateCreated: (() -> Void)? = nil
     
     var body: some View {
         NavigationStack {
@@ -29,6 +30,7 @@ struct CreateCandidateView: View {
                         Task {
                             await viewModel.createCandidate()
                             if !viewModel.showAlert {
+                                onCandidateCreated?()
                                 dismiss()
                             }
                         }
